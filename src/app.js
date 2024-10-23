@@ -102,4 +102,76 @@ class HashMap {
         targetBucket.length = 0;
         targetBucket.push(linkedList);
     }
+
+    get(key) {
+        let targetBucket = this.getBucket(key);
+        
+        // Check if the bucket is empty
+        if (targetBucket.length === 0) return null;
+
+        // Check if the key is found as a single entry return value.
+        let targetEntry = this.getEntry(targetBucket, key);
+        if (targetEntry) return targetEntry.value;
+
+        // If bucket contains linkedlist get value from it.
+        for (let entry of targetBucket){
+            if (entry instanceof LinkedList) {
+                return entry.retrieve(key);
+            }
+        }
+
+        return null;
+    }
+
+    has(key) {
+        let targetBucket = this.getBucket(key);
+
+        // Check if the bucket is empty
+        if (targetBucket.length === 0) return false;
+
+        // Loop through bucket check both single key-value pairs and linked lists
+        for (let entry of targetBucket) {
+            // If it's a direct key-value pair, check the key
+            if (entry.key === key) return true;
+
+            // If it's a LinkedList, check if it contains the key
+            if (entry instanceof LinkedList) {
+                return entry.contains(key);
+            }
+        }
+
+        return false;
+    }
+
+    remove(key) {
+        let targetBucket = this.getBucket(key);
+
+        // If bucket is empty, exit.
+        if (targetBucket.length === 0) return false;
+
+        // Loop through bucket check both single key-value pairs and linked lists
+        for (let entry of targetBucket) {
+            // If it's a direct key-value pair, delete it there.
+            if (entry.key === key) {
+                targetBucket.length = 0;
+                return true;
+            }
+
+            // If it's a LinkedList, check if it contains the key
+            if (entry instanceof LinkedList) {
+                let removedStatus = entry.remove(key);
+                // If the linked list is empty after removal, clear the bucket
+                if (removedStatus && entry.head() === null) targetBucket.length = 0;
+                return removedStatus;
+            }
+        }
+
+        return false;
+    }
+
+    clear() {
+        this.bucketsSpace.length = 0;
+        this.capacity = 16;
+        this.createBuckets();
+    }
 }
