@@ -1,3 +1,10 @@
+class Node {
+    constructor(key = null, value = null, nextNode = null) {
+        this.pair = { key, value };
+        this.nextNode = nextNode;
+    }
+}
+
 class LinkedList {
     constructor() {
         this.headNode = null;
@@ -50,7 +57,7 @@ class LinkedList {
         return null; // Return null if the key is not found.
     }
 
-    remove(key) {
+    delete(key) {
         // Removing non existent key.
         if (this.headNode === null) return false;
 
@@ -73,14 +80,56 @@ class LinkedList {
 
         return false;
     }
-    
-}
 
-class Node {
-    constructor(key = null, value = null, nextNode = null) {
-        this.pair = { key, value };
-        this.nextNode = nextNode;
+    size() {
+        let temp = this.headNode;
+        let counter = 0;
+
+        while(temp !== null) {
+            counter++;
+            temp = temp.nextNode;
+        }
+
+        return counter;
     }
+
+    getKeys() {
+        let keysInList = [];
+        let temp = this.headNode;
+
+        while(temp !== null) {
+            keysInList.push(temp.pair.key);
+            temp = temp.nextNode;
+        }
+
+        return keysInList;
+    }
+
+    getValues() {
+        let valuesInList = [];
+        let temp = this.headNode;
+    
+        while(temp !== null) {
+            valuesInList.push(temp.pair.value);
+            temp = temp.nextNode;
+        }
+
+        return valuesInList;
+    }
+
+    getEntries() {
+        let entriesInList = [];
+        let temp = this.headNode;
+
+        while (temp !== null) {
+            let { key, value } = temp.pair;
+            entriesInList.push([key, value]);
+            temp = temp.nextNode;
+        }
+
+        return entriesInList;
+    }
+    
 }
 
 export { LinkedList };
